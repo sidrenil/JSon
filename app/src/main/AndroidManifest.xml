@@ -33,6 +33,11 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <activity android:name=".DataGet"
+            android:exported="true">
+
+        </activity>
     </application>
 
 </manifest>

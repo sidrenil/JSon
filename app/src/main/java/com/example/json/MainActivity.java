@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     BluetoothAdapter mBluetoothAdapter;
     Button btnEnableDisable_Discoverable;
+    Button dataGetButton;
 
     public ArrayList<BluetoothDevice> mBTDevices = new ArrayList<>();
 
@@ -165,9 +166,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Button btnONOFF = (Button) findViewById(R.id.btnONOFF);
+        Button dataGetButton = (Button) findViewById(R.id.dataGetButton);
         btnEnableDisable_Discoverable = (Button) findViewById(R.id.btnDiscoverable_on_off);
         lvNewDevices = (ListView) findViewById(R.id.lvNewDevices);
         mBTDevices = new ArrayList<>();
+
 
         //Bağ durumu değiştiğinde yayınlar (yani: eşleştirme)
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
@@ -177,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         lvNewDevices.setOnItemClickListener(MainActivity.this);
 
-
         btnONOFF.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -186,6 +188,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
+        //Veriyi görmek için açılan sayfa
+        dataGetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent inte = new Intent(MainActivity.this, DataGet.class);
+                startActivity(inte);
+            }
+        });
+
+
+
+        /*
+              dataGetButton.setOnClickListener(new View.OnClickListener() {
+              @Override
+               public void onClick(View view) {
+                Log.d(TAG, "onClick: Diğer Sayfaya Geçme");
+                Intent intent = new Intent(getApplicationContext(), DataGet.class);
+                startActivity(intent);
+               }
+               });
+        */
     }
 
 
@@ -283,11 +306,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Log.d(TAG, "onItemClick: deviceName = " + deviceName);
         Log.d(TAG, "onItemClick: deviceAddress = " + deviceAddress);
 
+
         //bağ oluştur.
-        //NOT: API 17+ gerektirir mi? Bence bu JellyBean
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
             Log.d(TAG, "ile eşleştirmeye çalışıyorum " + deviceName);
             mBTDevices.get(i).createBond();
+
         }
+
+        //Yeni eklediğim yer
+        //Intent intent = new Intent(getApplicationContext(), Data.class);
+        //startActivity(intent);
     }
+
 }
