@@ -8,18 +8,19 @@
 
 
     <Button
-        android:id="@+id/veribas"
+        android:id="@+id/veriBas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Görmek İçin Bas"
         tools:ignore="MissingConstraints" />
 
     <TextView
+        android:id="@+id/veriGelecekYazi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="VERİ GELECEK YER"
-        app:layout_constraintTop_toBottomOf="@+id/veribas"
+        app:layout_constraintTop_toBottomOf="@+id/veriBas"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

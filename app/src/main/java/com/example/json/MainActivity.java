@@ -13,26 +13,34 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private static final String TAG = "MainActivity";
+    public static String EXTRA_ADDRESS = "device_address";
 
     BluetoothAdapter mBluetoothAdapter;
     Button btnEnableDisable_Discoverable;
     Button dataGetButton;
+    Button btnPaired;
+    private Set<BluetoothDevice> pairedDevices;
 
     public ArrayList<BluetoothDevice> mBTDevices = new ArrayList<>();
 
     public DeviceListAdapter mDeviceListAdapter;
 
     ListView lvNewDevices;
+    ListView lwPairedList;
 
 
     // ACTION_FOUND için bir Yayın Alıcısı oluşturdum
@@ -166,9 +174,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Button btnONOFF = (Button) findViewById(R.id.btnONOFF);
-        Button dataGetButton = (Button) findViewById(R.id.dataGetButton);
+        //Button dataGetButton = (Button) findViewById(R.id.dataGetButton);
+        Button btnPaired = (Button) findViewById(R.id.btnPaired);
         btnEnableDisable_Discoverable = (Button) findViewById(R.id.btnDiscoverable_on_off);
         lvNewDevices = (ListView) findViewById(R.id.lvNewDevices);
+        lwPairedList = (ListView) findViewById(R.id.lwPairedList);
         mBTDevices = new ArrayList<>();
 
 
@@ -189,27 +199,51 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
 
         //Veriyi görmek için açılan sayfa
-        dataGetButton.setOnClickListener(new View.OnClickListener() {
+        //dataGetButton.setOnClickListener(new View.OnClickListener() {
+          //  @Override
+            //public void onClick(View view) {
+              //  Intent inte = new Intent(MainActivity.this, DataGet.class);
+                //startActivity(inte);
+            //}
+        //});
+
+        btnPaired.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent inte = new Intent(MainActivity.this, DataGet.class);
-                startActivity(inte);
+                listDevices();
             }
         });
-
-
-
-        /*
-              dataGetButton.setOnClickListener(new View.OnClickListener() {
-              @Override
-               public void onClick(View view) {
-                Log.d(TAG, "onClick: Diğer Sayfaya Geçme");
-                Intent intent = new Intent(getApplicationContext(), DataGet.class);
-                startActivity(intent);
-               }
-               });
-        */
     }
+
+    @SuppressLint("MissingPermission")
+    private void listDevices() {
+        pairedDevices = mBluetoothAdapter.getBondedDevices();
+        ArrayList list = new ArrayList();
+
+        if(pairedDevices.size() > 0){
+            for(BluetoothDevice bt: pairedDevices){
+                list.add(bt.getName() + "\n" + bt.getAddress());
+            }
+        } else {
+            Toast.makeText(getApplicationContext(), "Eşleşmiş Cihaz Yok", Toast.LENGTH_SHORT).show();
+        }
+
+        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
+        lwPairedList.setAdapter(adapter);
+        lwPairedList.setOnItemClickListener(selectDevice);
+
+    }
+    public AdapterView.OnItemClickListener selectDevice = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            String info = ((TextView) view).getText().toString();
+            String address = info.substring(info.length()-17);
+
+            Intent comIntent = new Intent(MainActivity.this,DataGet.class);
+            comIntent.putExtra(EXTRA_ADDRESS, address);
+            startActivity(comIntent);
+        }
+    };
 
 
     @SuppressLint("MissingPermission")

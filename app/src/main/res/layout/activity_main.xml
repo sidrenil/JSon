@@ -31,17 +31,33 @@
         android:onClick="btnDiscover"
         android:text="Discover" />
 
+    <Button
+        android:id="@+id/btnPaired"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="50dp"
+        android:text="Eşleştirilmiş Cihazlar" />
+    <ListView
+        android:id="@+id/lwPairedList"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="300dp"/>
+
     <ListView
         android:id="@+id/lvNewDevices"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="50dp"
         android:layout_below="@id/btnFindUnpairedDevices" />
 
-    <Button
-        android:id="@+id/dataGetButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="400dp"
-        android:text="Diğer sayfaya Geç" />
+
 
 </RelativeLayout>
